@@ -44,6 +44,7 @@
         p1: { title: "Mister Aloy - Personal Branding Website Design" },
         p2: { title: "Coffee Shop Landing Page - Modern UI & Elegant Design" },
         p3: { title: "Saas Landing Page - Modern UI & Elegant Design" },
+        p4: { title: "Restaurant Landing Page - Modern UI & Elegant Design" },
       },
       contact: {
         title: "Contact",
@@ -97,6 +98,7 @@
         p1: { title: "Mister Aloy - Desain Website Personal Branding" },
         p2: { title: "Landing Page Kedai Kopi - UI Modern & Desain Elegan" },
         p3: { title: "Landing Page SaaS - UI Modern & Desain Elegan" },
+        p4: { title: "Landing Page Restoran - UI Modern & Desain Elegan" },
       },
       contact: {
         title: "Kontak",
