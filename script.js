@@ -1,259 +1,250 @@
-(function () {
-  "use strict";
+(() => {
 
-  var STR = {
-    en: {
-      nav: {
-        brand: "Portfolio",
-        about: "About",
-        skills: "Skills",
-        work: "Work",
-        contact: "Contact",
-      },
-      hero: {
-        eyebrow: "Hello, I'm",
-        sub:
-          "Designer & developer crafting thoughtful digital experiences. I build modern landing pages that help businesses grow and convert more users.",
-        workPrimary: "View work",
-        workSecondary: "Lihat karya",
-        contactPrimary: "Get in touch",
-        contactSecondary: "Hubungi saya",
-      },
-      about: { title: "About" },
-      skills: {
-        title: "Skills",
-        lead: "Core technologies I use to build for the web.",
-        html: "Semantic structure, accessibility, and meaningful markup.",
-        css: "Layout, responsive design, motion, and visual polish.",
-        js: "Interactivity, behavior, and dynamic user experiences.",
-      },
-      gallery: {
-        title: "Photo gallery",
-        cap1: "Workspace & focus",
-        cap2: "Design craft",
-        cap3: "Code on screen",
-        cap4: "Creative flow",
-      },
-      work: {
-        title: "Selected work",
-        tagWeb: "Web",
-        tagMobile: "Web",
-        tagBrand: "Brand",
-        viewPrimary: "View project",
-        viewSecondary: "Lihat proyek",
-        p1: { title: "Mister Aloy - Personal Branding Website Design" },
-        p2: { title: "Coffee Shop Landing Page - Modern UI & Elegant Design" },
-        p3: { title: "Saas Landing Page - Modern UI & Elegant Design" },
-        p4: { title: "Restaurant Landing Page - Modern UI & Elegant Design" },
-      },
-      contact: {
-        title: "Contact",
-        lead: "Open to collaborations and available for freelance work. Say hello.",
-        whatsappPrimary: "Message on WhatsApp",
-        whatsappSecondary: "Chat di WhatsApp",
-        portfolioPrimary: "See portfolio",
-        portfolioSecondary: "Lihat portofolio",
-      },
-      footer: { built: "Built with HTML, CSS & JS." },
+      /* -------------------------------------------------------
+         Mobile Navbar
+      ------------------------------------------------------- */
+
+      const toggleBtn = document.querySelector('.notion-navbar-toggle');
+      const menu = document.querySelector('.notion-navbar-menu');
+      const iconMenu = document.querySelector('.icon-menu');
+      const iconClose = document.querySelector('.icon-close');
+      const navLinks = document.querySelectorAll('.notion-nav-link');
+
+      const closeMobileMenu = () => {
+        if (!toggleBtn || !menu) return;
+
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.setAttribute('aria-label', 'Buka navigasi');
+        menu.classList.remove('is-open');
+
+        if (iconMenu) iconMenu.style.display = 'block';
+        if (iconClose) iconClose.style.display = 'none';
+      };
+
+      if (toggleBtn && menu) {
+        toggleBtn.addEventListener('click', () => {
+          const isOpen =
+            toggleBtn.getAttribute('aria-expanded') === 'true';
+
+          toggleBtn.setAttribute(
+            'aria-expanded',
+            String(!isOpen)
+          );
+
+          toggleBtn.setAttribute(
+            'aria-label',
+            isOpen ? 'Buka navigasi' : 'Tutup navigasi'
+          );
+
+          menu.classList.toggle('is-open', !isOpen);
+
+          if (iconMenu) {
+            iconMenu.style.display = isOpen ? 'block' : 'none';
+          }
+
+          if (iconClose) {
+            iconClose.style.display = isOpen ? 'none' : 'block';
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.addEventListener('click', closeMobileMenu);
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 768) {
+            closeMobileMenu();
+          }
+        });
+      }
+
+
+      /* -------------------------------------------------------
+         Scroll Reveal
+      ------------------------------------------------------- */
+
+      const revealElements =
+        document.querySelectorAll('.reveal-element');
+
+      if (!('IntersectionObserver' in window)) {
+        revealElements.forEach(element => {
+          element.classList.add('is-visible');
+        });
+      } else {
+        const revealObserver = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+          }
+        );
+
+        revealElements.forEach(element => {
+          revealObserver.observe(element);
+        });
+      }
+
+
+      /* -------------------------------------------------------
+         Back To Top
+      ------------------------------------------------------- */
+
+      const backToTopBtn =
+        document.querySelector('.footer-back-to-top');
+
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+
+      /* -------------------------------------------------------
+         Active Navbar Link
+      ------------------------------------------------------- */
+
+      const sections = document.querySelectorAll('section[id]');
+      const sectionLinks =
+        document.querySelectorAll('.notion-nav-link');
+
+      if ('IntersectionObserver' in window) {
+        const navObserver = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+
+              sectionLinks.forEach(link => {
+                link.classList.toggle(
+                  'active',
+                  link.getAttribute('href') === `#${entry.target.id}`
+                );
+              });
+            });
+          },
+          {
+            rootMargin: '-35% 0px -55% 0px',
+            threshold: 0
+          }
+        );
+
+        sections.forEach(section => {
+          navObserver.observe(section);
+        });
+      }
+
+    })();
+
+(() => {
+
+  /* -------------------------------------------------------
+     Project Modal — Studi Kasus dengan Copywriting Sales
+  ------------------------------------------------------- */
+
+  const projectData = {
+    'chillmrkt2nd': {
+      title: 'Platform E-Commerce & Sistem Verifikasi chillmrkt2nd',
+      image: 'img/chillmrkt2nd.jpeg',
+      problem: 'Membangun kepercayaan pelanggan pada keaslian produk barang bekas/vintage dan mempermudah proses negosiasi.',
+      solution: 'Sistem verifikasi keaslian unik (nomor tag khusus), integrasi negosiasi via WhatsApp untuk konversi instan, dan UI/UX berkonsep streetwear.'
     },
-    id: {
-      nav: {
-        brand: "Portofolio",
-        about: "Tentang",
-        skills: "Keahlian",
-        work: "Karya",
-        contact: "Kontak",
-      },
-      hero: {
-        eyebrow: "Halo, saya",
-        sub:
-          "Desainer dan pengembang yang merancang pengalaman digital yang matang dan bermakna. Saya membangun landing page modern yang membantu bisnis berkembang dan mengonversi lebih banyak pengguna.",
-        workPrimary: "Lihat karya",
-        workSecondary: "View work",
-        contactPrimary: "Hubungi saya",
-        contactSecondary: "Get in touch",
-      },
-      about: { title: "Tentang" },
-      skills: {
-        title: "Keahlian",
-        lead: "Teknologi inti yang saya gunakan untuk membangun web.",
-        html: "Struktur semantik, aksesibilitas, dan penandaan yang bermakna.",
-        css: "Tata letak, desain responsif, motion, dan penyempurnaan visual.",
-        js: "Interaktivitas, perilaku, dan pengalaman pengguna yang dinamis.",
-      },
-      gallery: {
-        title: "Galeri foto",
-        cap1: "Ruang kerja & fokus",
-        cap2: "Kerajinan desain",
-        cap3: "Kode di layar",
-        cap4: "Alur kreatif",
-      },
-      work: {
-        title: "Karya pilihan",
-        tagWeb: "Web",
-        tagMobile: "Seluler",
-        tagBrand: "Brand",
-        viewPrimary: "Lihat proyek",
-        viewSecondary: "View project",
-        p1: { title: "Mister Aloy - Desain Website Personal Branding" },
-        p2: { title: "Landing Page Kedai Kopi - UI Modern & Desain Elegan" },
-        p3: { title: "Landing Page SaaS - UI Modern & Desain Elegan" },
-        p4: { title: "Landing Page Restoran - UI Modern & Desain Elegan" },
-      },
-      contact: {
-        title: "Kontak",
-        lead: "Terbuka untuk kolaborasi dan tersedia untuk pekerjaan lepas. Silakan menghubungi.",
-        whatsappPrimary: "Chat di WhatsApp",
-        whatsappSecondary: "Message on WhatsApp",
-        portfolioPrimary: "Lihat portofolio",
-        portfolioSecondary: "See portfolio",
-      },
-      footer: { built: "Dibuat dengan HTML, CSS & JS." },
+    'beauty-consultation': {
+      title: 'Sistem Manajemen Booking & Konsultasi',
+      image: 'img/color.jpeg',
+      problem: 'Penjadwalan konsultasi manual yang rentan bentrok dan pelacakan status pembayaran yang tidak efisien.',
+      solution: 'Dashboard interaktif untuk manajemen jadwal otomatis, pelacakan status pembayaran real-time, dan antarmuka pengguna yang meningkatkan retensi klien.'
     },
+    'kedai-woeloeng': {
+      title: 'Website E-Menu & Sistem Delivery Kedai Woeloeng',
+      image: 'img/kw.jpeg',
+      problem: 'Membutuhkan platform digital mandiri untuk memfasilitasi pesanan delivery langsung guna menghindari potongan komisi aplikasi pihak ketiga.',
+      solution: 'Desain UI appetizing (menggugah selera), sistem pemesanan terintegrasi, dan kalkulasi promo gratis ongkir berdasarkan radius.'
+    },
+    'kawungan-coffee': {
+      title: 'Website Reservasi & Brand Storytelling Kawungan Coffee',
+      image: 'img/kawungan.jpeg',
+      problem: 'Kebutuhan untuk mengomunikasikan filosofi brand secara digital sekaligus menyederhanakan alur reservasi meja.',
+      solution: 'Desain elegan yang menonjolkan elemen budaya lokal, fitur reservasi online mandiri, dan etalase menu premium.'
+    },
+    'banter-express': {
+      title: 'Dashboard Operasional & Analitik Banter Express',
+      image: 'img/banter.jpeg',
+      problem: 'Kesulitan memantau performa kurir harian dan melacak pesanan serta alur kas secara real-time.',
+      solution: 'Visualisasi data analitik (grafik order & pendapatan), live tracking metrik kurir, dan sistem rekapitulasi data otomatis.'
+    },
+    'jasun-marju': {
+      title: 'Profil Digital & Portofolio Musisi Jasun Marju',
+      image: 'img/jasun.jpeg',
+      problem: 'Membutuhkan pusat informasi digital (EPK/Electronic Press Kit) yang profesional untuk menarik promotor dan label musik.',
+      solution: 'Integrasi pemutar lagu Spotify langsung di website, galeri portofolio responsif, dan arsitektur informasi yang menonjolkan pencapaian karier.'
+    }
   };
 
-  function getByPath(obj, path) {
-    return path.split(".").reduce(function (acc, key) {
-      return acc != null ? acc[key] : undefined;
-    }, obj);
-  }
+  const modalOverlay = document.querySelector('.project-modal-overlay');
+  const modalImage = document.querySelector('.project-modal-image-wrapper img');
+  const modalTitle = document.querySelector('.project-modal-title');
+  const modalProblem = document.querySelector('.project-modal-problem');
+  const modalSolution = document.querySelector('.project-modal-solution');
+  const modalCloseBtn = document.querySelector('.project-modal-close');
+  const projectCards = document.querySelectorAll('.portfolio-card[data-project]');
 
-  function applyLang(lang) {
-    if (lang !== "id" && lang !== "en") lang = "en";
-    var bundle = STR[lang];
-    document.documentElement.lang = lang;
+  const openProjectModal = (projectId) => {
+    const data = projectData[projectId];
+    if (!data || !modalOverlay) return;
 
-    document.querySelectorAll("[data-i18n]").forEach(function (el) {
-      var key = el.getAttribute("data-i18n");
-      if (!key) return;
-      var val = getByPath(bundle, key);
-      if (typeof val === "string") el.textContent = val;
-    });
-
-    document.querySelectorAll("[data-i18n-alt]").forEach(function (el) {
-      var key = el.getAttribute("data-i18n-alt");
-      if (!key) return;
-      var val = getByPath(bundle, key);
-      if (typeof val === "string") el.setAttribute("alt", val);
-    });
-
-    document.querySelectorAll("[data-lang]").forEach(function (el) {
-      var lg = el.getAttribute("data-lang");
-      el.hidden = lg !== lang;
-    });
-
-    try {
-      localStorage.setItem("siteLang", lang);
-    } catch (e) {}
-
-    document.querySelectorAll("[data-lang-set]").forEach(function (btn) {
-      var active = btn.getAttribute("data-lang-set") === lang;
-      btn.classList.toggle("is-active", active);
-      btn.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-  }
-
-  var stored =
-    typeof localStorage !== "undefined" ? localStorage.getItem("siteLang") : null;
-  applyLang(stored === "id" ? "id" : "en");
-
-  document.querySelectorAll("[data-lang-set]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      applyLang(btn.getAttribute("data-lang-set") || "en");
-    });
-  });
-
-  document.documentElement.classList.add("anim-ready");
-
-  var yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
-
-  var header = document.querySelector(".site-header");
-  function onScrollHeader() {
-    if (!header) return;
-    if (window.scrollY > 24) header.classList.add("is-scrolled");
-    else header.classList.remove("is-scrolled");
-  }
-  window.addEventListener("scroll", onScrollHeader, { passive: true });
-  onScrollHeader();
-
-  var prefersReduced =
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  var fadeEls = document.querySelectorAll("[data-fade]");
-  fadeEls.forEach(function (el) {
-    el.classList.add("js-ready");
-  });
-
-  if (!prefersReduced) {
-    requestAnimationFrame(function () {
-      fadeEls.forEach(function (el) {
-        el.classList.add("is-visible");
-      });
-    });
-  } else {
-    fadeEls.forEach(function (el) {
-      el.classList.add("is-visible");
-    });
-  }
-
-  var revealSelector = "[data-reveal], [data-reveal-child]";
-  var revealEls = document.querySelectorAll(revealSelector);
-
-  var workCards = document.querySelectorAll(".work-card[data-reveal-child]");
-  workCards.forEach(function (card, i) {
-    card.style.setProperty("--i", String(i));
-  });
-
-  var skillCards = document.querySelectorAll(".skill-card[data-reveal-child]");
-  skillCards.forEach(function (card, i) {
-    card.style.setProperty("--i", String(i));
-  });
-
-  if (prefersReduced) {
-    revealEls.forEach(function (el) {
-      el.classList.add("is-in-view");
-    });
-    var footer = document.querySelector(".fade-footer");
-    if (footer) footer.classList.add("is-visible");
-    return;
-  }
-
-  var observer = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        var el = entry.target;
-        if (entry.isIntersecting) {
-          el.classList.remove("is-out-view");
-          el.classList.add("is-in-view");
-        } else {
-          el.classList.remove("is-in-view");
-          el.classList.add("is-out-view");
-        }
-      });
-    },
-    {
-      root: null,
-      rootMargin: "-8% 0px -8% 0px",
-      threshold: 0.08,
+    if (modalImage) {
+      modalImage.src = data.image;
+      modalImage.alt = data.title;
     }
-  );
+    if (modalTitle) modalTitle.textContent = data.title;
+    if (modalProblem) modalProblem.textContent = data.problem;
+    if (modalSolution) modalSolution.textContent = data.solution;
 
-  revealEls.forEach(function (el) {
-    observer.observe(el);
+    modalOverlay.classList.add('is-open');
+    document.body.classList.add('modal-open');
+  };
+
+  const closeProjectModal = () => {
+    if (!modalOverlay) return;
+    modalOverlay.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+  };
+
+  projectCards.forEach(card => {
+    card.addEventListener('click', () => {
+      openProjectModal(card.getAttribute('data-project'));
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openProjectModal(card.getAttribute('data-project'));
+      }
+    });
   });
 
-  var footer = document.querySelector(".fade-footer");
-  if (footer) {
-    var footerObs = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) footer.classList.add("is-visible");
-          else footer.classList.remove("is-visible");
-        });
-      },
-      { threshold: 0.2 }
-    );
-    footerObs.observe(footer);
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeProjectModal);
   }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (event) => {
+      if (event.target === modalOverlay) closeProjectModal();
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeProjectModal();
+  });
+
 })();
